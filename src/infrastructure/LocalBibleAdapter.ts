@@ -12,6 +12,16 @@ interface BookData {
 }
 
 /**
+ * SearchIndexBook (Interface)
+ * Represents the compressed structure of a book inside the search index.
+ */
+interface SearchIndexBook {
+	id: string;
+	name: string;
+	verses: [number, number, string][];
+}
+
+/**
  * Simple IndexedDB Cache Manager
  * A zero-dependency local cache store utilizing IndexedDB.
  * Minimizes network requests and memory overhead by persisting book chunks locally.
@@ -80,6 +90,8 @@ export class LocalBibleAdapter implements BibleProviderPort {
 	private dbCache = new IndexedDBCache();
 	private booksMetadata: Book[] | null = null;
 	private metadataPromise: Promise<Book[]> | null = null;
+	private searchIndex: SearchIndexBook[] | null = null;
+	private searchIndexPromise: Promise<SearchIndexBook[]> | null = null;
 
 	constructor() {
 		this.dbCache
@@ -179,31 +191,55 @@ export class LocalBibleAdapter implements BibleProviderPort {
 	}
 
 	/**
-	 * Performs client-side search across all currently cached books.
-	 * Note: In production full-stack, this would query Convex vector/full-text search.
+	 * Performs high-performance client-side search across all 66 books of the Bible.
+	 * Lazy-loads the highly minimized search index (search-index.json) on the first query.
 	 */
 	async search(query: string): Promise<SearchResult[]> {
 		const results: SearchResult[] = [];
 		const normalizedQuery = query.toLowerCase().trim();
 		if (normalizedQuery.length < 2) return results;
 
-		// Search across currently loaded memory cache books
-		for (const [bookId, bookData] of this.memoryCache.entries()) {
-			for (const chapter of bookData.chapters) {
-				for (const verse of chapter.verses) {
-					if (verse.text.toLowerCase().includes(normalizedQuery)) {
-						results.push({
-							bookId: bookId,
-							bookName: bookData.name,
-							chapter: chapter.chapter,
-							verseNumber: verse.number,
-							text: verse.text,
-						});
-						if (results.length >= 100) return results;
-					}
+		// 1. Lazy-load search index if not already loaded
+		if (!this.searchIndex) {
+			if (!this.searchIndexPromise) {
+				this.searchIndexPromise = fetch("/bible/search-index.json")
+					.then((res) => {
+						if (!res.ok) throw new Error("Failed to fetch search index");
+						return res.json();
+					})
+					.then((data) => {
+						this.searchIndex = data;
+						return data;
+					})
+					.catch((err) => {
+						console.error("Error loading search index:", err);
+						return [];
+					});
+			}
+			await this.searchIndexPromise;
+		}
+
+		if (!this.searchIndex) return results;
+
+		// 2. Perform in-memory search across all books (blistering fast)
+		for (const book of this.searchIndex) {
+			const bookId = book.id;
+			const bookName = book.name;
+
+			for (const [chapter, number, text] of book.verses) {
+				if (text.toLowerCase().includes(normalizedQuery)) {
+					results.push({
+						bookId,
+						bookName,
+						chapter,
+						verseNumber: number,
+						text,
+					});
+					if (results.length >= 100) return results;
 				}
 			}
 		}
+
 		return results;
 	}
 }

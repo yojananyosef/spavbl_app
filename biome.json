@@ -6,7 +6,12 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["**", "!!dist", "!!node_modules"]
+		"includes": [
+			"**",
+			"!!dist",
+			"!!node_modules",
+			"!!public/bible/search-index.json"
+		]
 	},
 	"formatter": {
 		"enabled": true,
