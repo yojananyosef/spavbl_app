@@ -3,13 +3,19 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	Highlighter,
-	MessageSquare,
 	Plus,
 	Trash2,
 	X,
 } from "lucide-react";
 import type React from "react";
 import { useMemo, useState } from "react";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import type { Chapter, Footnote, Highlight, Note } from "../../core/entities";
 
 interface BibleReaderProps {
@@ -62,9 +68,7 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 	notes,
 	highlights,
 	selectedVerse,
-	activeFootnote,
 	setSelectedVerse,
-	setActiveFootnote,
 	nextChapter,
 	prevChapter,
 	addHighlight,
@@ -98,7 +102,6 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 			setSelectedVerse(verseNumber);
 			setNoteText(notesMap.get(verseNumber) || "");
 		}
-		setActiveFootnote(null);
 	};
 
 	const handleSaveNoteClick = () => {
@@ -109,14 +112,22 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 
 	if (isLoading) {
 		return (
-			<div className="flex-1 flex flex-col items-center justify-center h-[calc(100vh-4rem)] bg-background">
-				<div className="relative w-12 h-12">
-					<div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
-					<div className="absolute inset-0 rounded-full border-4 border-t-primary animate-spin"></div>
+			<div className="flex-1 overflow-y-auto px-8 py-10 max-w-3xl mx-auto w-full space-y-6 select-none h-[calc(100vh-4rem)]">
+				<div className="space-y-3">
+					<Skeleton className="h-8 w-48 rounded-lg" />
+					<Skeleton className="h-4 w-32 rounded-lg" />
 				</div>
-				<p className="mt-4 text-sm font-semibold text-muted-foreground/80">
-					Cargando escrituras...
-				</p>
+				<div className="space-y-4 pt-6">
+					<Skeleton className="h-6 w-full rounded-md" />
+					<Skeleton className="h-6 w-[96%] rounded-md" />
+					<Skeleton className="h-6 w-[93%] rounded-md" />
+					<Skeleton className="h-6 w-[88%] rounded-md" />
+				</div>
+				<div className="space-y-4 pt-6">
+					<Skeleton className="h-6 w-full rounded-md" />
+					<Skeleton className="h-6 w-[95%] rounded-md" />
+					<Skeleton className="h-6 w-[91%] rounded-md" />
+				</div>
 			</div>
 		);
 	}
@@ -130,9 +141,9 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 	}
 
 	return (
-		<div className="flex-1 h-[calc(100vh-4rem)] flex flex-col relative overflow-hidden bg-background">
+		<div className="flex-1 h-[calc(100vh-4rem)] flex flex-col relative overflow-hidden bg-background animate-accordion-down">
 			{/* 1. Chapter Title Header */}
-			<div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0 glass-panel">
+			<div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0 bg-card/85 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<button
 						onClick={prevChapter}
@@ -189,25 +200,33 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 									{/* Verse text content */}
 									{verse.text}
 
-									{/* Footnotes references */}
+									{/* Footnotes references with inline Popover */}
 									{verse.footnotes?.map((fn) => (
-										<button
-											key={fn.id}
-											onClick={(e) => {
-												e.stopPropagation();
-												setActiveFootnote(fn);
-												setSelectedVerse(null);
-											}}
-											className="text-accent hover:text-accent-foreground mx-0.5 font-sans font-bold hover:bg-accent/10 rounded px-0.5 text-xs select-none"
-										>
-											{fn.mark}
-										</button>
+										<Popover key={fn.id}>
+											<PopoverTrigger asChild>
+												<button
+													className="text-primary hover:text-primary mx-0.5 font-sans font-bold hover:bg-primary/10 rounded px-0.5 text-xs select-none cursor-pointer"
+													onClick={(e) => e.stopPropagation()}
+												>
+													{fn.mark}
+												</button>
+											</PopoverTrigger>
+											<PopoverContent
+												className="w-80 bg-card border border-border shadow-lg z-50 p-4 rounded-xl text-xs md:text-sm text-muted-foreground leading-normal font-sans"
+												onClick={(e) => e.stopPropagation()}
+											>
+												<div className="flex items-center gap-1.5 mb-1.5 text-xxs font-bold uppercase tracking-wider text-primary">
+													<BookOpen size={10} /> Nota al Pie ({fn.mark})
+												</div>
+												{fn.text}
+											</PopoverContent>
+										</Popover>
 									))}
 
 									{/* Notes indicators */}
 									{hasNote && (
 										<span className="inline-flex items-center align-middle ml-1 p-0.5 rounded bg-secondary text-primary select-none animate-pulse">
-											<MessageSquare size={10} />
+											<BookOpen size={10} />
 										</span>
 									)}
 								</span>
@@ -217,34 +236,9 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 				</div>
 			</div>
 
-			{/* 3. Footnote overlay display panel */}
-			{activeFootnote && (
-				<div className="absolute bottom-6 left-6 right-6 max-w-xl mx-auto glass-panel p-4 rounded-xl border border-border shadow-lg z-20 flex items-start gap-3 animate-accordion-down">
-					<div className="p-2 rounded-lg bg-accent/10 text-accent shrink-0">
-						<BookOpen size={16} />
-					</div>
-					<div className="flex-1 min-w-0">
-						<div className="flex items-center justify-between mb-1.5">
-							<span className="font-semibold text-xs uppercase tracking-wider text-accent">
-								Nota al Pie ({activeFootnote.mark})
-							</span>
-							<button
-								onClick={() => setActiveFootnote(null)}
-								className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
-							>
-								<X size={12} />
-							</button>
-						</div>
-						<p className="text-xs md:text-sm text-muted-foreground leading-normal font-sans">
-							{activeFootnote.text}
-						</p>
-					</div>
-				</div>
-			)}
-
-			{/* 4. Contextual Verse Action Drawer (Floating at the bottom) */}
+			{/* 3. Contextual Verse Action Drawer (Floating at the bottom) */}
 			{selectedVerse !== null && (
-				<div className="absolute bottom-6 left-6 right-6 max-w-2xl mx-auto glass-panel rounded-2xl border border-border shadow-2xl z-30 p-4 flex flex-col md:flex-row gap-4 justify-between animate-accordion-down">
+				<div className="absolute bottom-6 left-6 right-6 max-w-2xl mx-auto bg-card/95 backdrop-blur-md rounded-2xl border border-border shadow-2xl z-30 p-4 flex flex-col md:flex-row gap-4 justify-between animate-accordion-down">
 					{/* Note Editor Area */}
 					<div className="flex-1 flex flex-col gap-2">
 						<div className="flex items-center justify-between">
@@ -260,8 +254,8 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 						</div>
 
 						{/* Note text field */}
-						<textarea
-							className="w-full h-16 bg-secondary/30 border border-border/40 rounded-xl p-2 text-xs font-medium outline-none focus:border-primary/80 focus:bg-secondary/10 resize-none transition-all placeholder:text-muted-foreground/60"
+						<Textarea
+							className="w-full h-16 bg-secondary/30 border border-border/40 rounded-xl p-2 text-xs font-medium outline-none focus:border-primary/80 focus:bg-secondary/10 resize-none transition-all placeholder:text-muted-foreground/60 focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0"
 							placeholder="Escriba aquí notas de estudio, oraciones o pensamientos personales..."
 							value={noteText}
 							onChange={(e) => setNoteText(e.target.value)}
@@ -289,7 +283,7 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 
 					{/* Highlights Palette */}
 					<div className="flex flex-col gap-2 shrink-0 md:w-44">
-						<h4 className="text-xs font-bold uppercase tracking-wider text-accent flex items-center gap-1 px-1">
+						<h4 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1 px-1">
 							<Highlighter size={12} /> Resaltado
 						</h4>
 						<div className="flex gap-1.5 px-1 py-1">

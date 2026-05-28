@@ -24,9 +24,7 @@ export const App: React.FC = () => {
 		notes,
 		highlights,
 		selectedVerse,
-		activeFootnote,
 		setSelectedVerse,
-		setActiveFootnote,
 
 		// Search Data
 		searchQuery,
@@ -56,7 +54,7 @@ export const App: React.FC = () => {
 	return (
 		<div className="min-h-screen bg-background text-foreground flex flex-col antialiased">
 			{/* 1. Global Header Bar */}
-			<header className="h-16 border-b border-border flex items-center justify-between px-6 shrink-0 glass-panel z-20">
+			<header className="h-16 border-b border-border flex items-center justify-between px-6 shrink-0 bg-card/85 backdrop-blur-md z-20">
 				<div className="flex items-center gap-3">
 					{/* Sidebar Toggle */}
 					<button
@@ -71,7 +69,7 @@ export const App: React.FC = () => {
 
 					{/* Logo & Title */}
 					<div className="flex items-center gap-2 select-none">
-						<div className="p-1.5 rounded-lg bg-accent text-accent-foreground font-semibold flex items-center justify-center">
+						<div className="p-1.5 rounded-lg bg-primary text-primary-foreground font-semibold flex items-center justify-center">
 							<BookOpen size={16} />
 						</div>
 						<span className="font-bold text-base tracking-tight font-sans hidden sm:inline">
@@ -123,9 +121,7 @@ export const App: React.FC = () => {
 					notes={notes}
 					highlights={highlights}
 					selectedVerse={selectedVerse}
-					activeFootnote={activeFootnote}
 					setSelectedVerse={setSelectedVerse}
-					setActiveFootnote={setActiveFootnote}
 					nextChapter={nextChapter}
 					prevChapter={prevChapter}
 					addHighlight={addHighlight}

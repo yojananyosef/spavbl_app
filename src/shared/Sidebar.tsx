@@ -32,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 	if (!isSidebarOpen) return null;
 
 	return (
-		<aside className="w-80 h-[calc(100vh-4rem)] glass-panel border-r border-border overflow-hidden flex flex-col transition-all duration-300 z-10 shrink-0">
+		<aside className="w-80 h-[calc(100vh-4rem)] bg-card/85 backdrop-blur-md border-r border-border overflow-hidden flex flex-col transition-all duration-300 z-10 shrink-0">
 			{/* Title Header */}
 			<div className="p-4 border-b border-border flex items-center gap-3">
 				<div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -51,19 +51,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
 			{/* Book & Chapter Nav Containers */}
 			<div className="flex-1 flex overflow-hidden">
 				{/* Books List (Left column in sidebar) */}
-				<div className="w-1/2 overflow-y-auto border-r border-border no-scrollbar">
-					<div className="p-2 text-xxs font-bold uppercase tracking-wider text-muted-foreground/60 px-3 py-2 flex items-center gap-1.5">
+				<div className="w-1/2 h-full border-r border-border flex flex-col overflow-hidden">
+					{/* Aligned Header */}
+					<div className="px-3 py-2.5 border-b border-border/40 text-xxs font-bold uppercase tracking-wider text-muted-foreground/60 flex items-center gap-1.5 shrink-0 select-none h-10">
 						<Compass size={10} />
 						Libros
 					</div>
-					<div className="flex flex-col gap-0.5 p-1">
+					{/* Scrollable Content */}
+					<div className="flex-1 overflow-y-auto custom-scrollbar p-1.5 flex flex-col gap-0.5">
 						{books.map((book) => {
 							const isActive = book.id === activeBookId;
 							return (
 								<button
 									key={book.id}
 									onClick={() => changeBook(book.id)}
-									className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between ${
+									className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between ${
 										isActive
 											? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[0.98]"
 											: "hover:bg-secondary text-foreground/80 hover:text-foreground"
@@ -80,12 +82,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 				</div>
 
 				{/* Chapters Grid (Right column in sidebar) */}
-				<div className="w-1/2 overflow-y-auto bg-secondary/20 p-2">
-					{activeBook ? (
-						<div className="flex flex-col">
-							<div className="text-xxs font-bold uppercase tracking-wider text-muted-foreground/60 px-2 py-1 mb-2">
-								Capítulos
-							</div>
+				<div className="w-1/2 h-full bg-secondary/20 flex flex-col overflow-hidden">
+					{/* Aligned Header */}
+					<div className="px-3 py-2.5 border-b border-border/40 text-xxs font-bold uppercase tracking-wider text-muted-foreground/60 flex items-center gap-1.5 shrink-0 select-none h-10">
+						<BookOpen size={10} />
+						Capítulos
+					</div>
+					{/* Scrollable Grid */}
+					<div className="flex-1 overflow-y-auto custom-scrollbar p-1.5">
+						{activeBook ? (
 							<div className="grid grid-cols-3 gap-1.5">
 								{Array.from(
 									{ length: activeBook.chaptersCount },
@@ -98,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 											onClick={() => changeChapter(chapterNum)}
 											className={`aspect-square rounded-lg flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
 												isActive
-													? "bg-accent text-accent-foreground shadow-sm shadow-accent/20 scale-[0.96]"
+													? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[0.96]"
 													: "bg-card text-foreground hover:bg-secondary hover:text-foreground border border-border/50 hover:border-border"
 											}`}
 										>
@@ -107,12 +112,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 									);
 								})}
 							</div>
-						</div>
-					) : (
-						<div className="h-full flex items-center justify-center text-xs text-muted-foreground/75 text-center p-4">
-							Seleccione un libro
-						</div>
-					)}
+						) : (
+							<div className="h-full flex items-center justify-center text-xs text-muted-foreground/75 text-center p-4 select-none">
+								Seleccione un libro
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</aside>

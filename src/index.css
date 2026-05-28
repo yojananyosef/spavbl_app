@@ -1,29 +1,51 @@
 @import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@300..800&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
 	--font-sans: "Outfit", sans-serif;
 	--font-serif: "Lora", serif;
+	--font-heading: "Outfit", sans-serif;
 
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
 
-	--color-primary: var(--primary);
-	--color-primary-foreground: var(--primary-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
 
-	--color-secondary: var(--secondary);
-	--color-secondary-foreground: var(--secondary-foreground);
-
-	--color-accent: var(--accent);
-	--color-accent-foreground: var(--accent-foreground);
-
-	--color-card: var(--card);
-	--color-card-foreground: var(--card-foreground);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
 
 	--animate-accordion-down: accordion-down 0.2s ease-out;
 	--animate-accordion-up: accordion-up 0.2s ease-out;
@@ -31,57 +53,62 @@
 
 @layer base {
 	:root {
-		--background: hsl(210 40% 98%);
-		--foreground: hsl(222 47% 11%);
-
+		--background: hsl(0 0% 100%);
+		--foreground: hsl(222.2 84% 4.9%);
 		--card: hsl(0 0% 100%);
-		--card-foreground: hsl(222 47% 11%);
-
+		--card-foreground: hsl(222.2 84% 4.9%);
 		--popover: hsl(0 0% 100%);
-		--popover-foreground: hsl(222 47% 11%);
+		--popover-foreground: hsl(222.2 84% 4.9%);
 
+		/* Premium certified Blue primary */
 		--primary: hsl(221.2 83.2% 53.3%);
 		--primary-foreground: hsl(210 40% 98%);
 
+		/* Soft slate-grey for secondary/hover styles (no purple!) */
 		--secondary: hsl(210 40% 96.1%);
-		--secondary-foreground: hsl(222 47% 11.2%);
-
+		--secondary-foreground: hsl(222.2 47.4% 11.2%);
 		--muted: hsl(210 40% 96.1%);
 		--muted-foreground: hsl(215.4 16.3% 46.9%);
 
-		--accent: hsl(262.1 83.3% 57.8%);
-		--accent-foreground: hsl(210 40% 98%);
+		/* Accent hover background (very subtle blue-grey) */
+		--accent: hsl(210 40% 96.1%);
+		--accent-foreground: hsl(222.2 47.4% 11.2%);
 
 		--destructive: hsl(0 84.2% 60.2%);
 		--destructive-foreground: hsl(210 40% 98%);
 
-		--border: hsl(214.3 31.8% 91.4%);
-		--input: hsl(214.3 31.8% 91.4%);
+		--border: hsl(214.3 32.2% 91.4%);
+		--input: hsl(214.3 32.2% 91.4%);
 		--ring: hsl(221.2 83.2% 53.3%);
-
 		--radius: 0.75rem;
+
+		--sidebar: hsl(210 40% 98%);
+		--sidebar-foreground: hsl(222.2 84% 4.9%);
+		--sidebar-primary: hsl(221.2 83.2% 53.3%);
+		--sidebar-primary-foreground: hsl(210 40% 98%);
+		--sidebar-accent: hsl(210 40% 96.1%);
+		--sidebar-accent-foreground: hsl(222.2 47.4% 11.2%);
+		--sidebar-border: hsl(214.3 32.2% 91.4%);
+		--sidebar-ring: hsl(221.2 83.2% 53.3%);
 	}
 
 	.dark {
-		--background: hsl(222 47% 6%);
+		--background: hsl(222.2 84% 4.9%);
 		--foreground: hsl(210 40% 98%);
-
-		--card: hsl(222 47% 10%);
+		--card: hsl(222.2 84% 4.9%);
 		--card-foreground: hsl(210 40% 98%);
-
-		--popover: hsl(222 47% 9.5%);
+		--popover: hsl(222.2 84% 4.9%);
 		--popover-foreground: hsl(210 40% 98%);
 
 		--primary: hsl(217.2 91.2% 59.8%);
-		--primary-foreground: hsl(222 47% 11.2%);
+		--primary-foreground: hsl(222.2 47.4% 11.2%);
 
 		--secondary: hsl(217.2 32.6% 17.5%);
 		--secondary-foreground: hsl(210 40% 98%);
-
 		--muted: hsl(217.2 32.6% 17.5%);
 		--muted-foreground: hsl(215 20.2% 65.1%);
 
-		--accent: hsl(263.4 70% 50.4%);
+		--accent: hsl(217.2 32.6% 17.5%);
 		--accent-foreground: hsl(210 40% 98%);
 
 		--destructive: hsl(0 62.8% 30.6%);
@@ -90,6 +117,25 @@
 		--border: hsl(217.2 32.6% 17.5%);
 		--input: hsl(217.2 32.6% 17.5%);
 		--ring: hsl(224.3 76.3% 48%);
+
+		--sidebar: hsl(222.2 84% 4.9%);
+		--sidebar-foreground: hsl(210 40% 98%);
+		--sidebar-primary: hsl(217.2 91.2% 59.8%);
+		--sidebar-primary-foreground: hsl(222.2 47.4% 11.2%);
+		--sidebar-accent: hsl(217.2 32.6% 17.5%);
+		--sidebar-accent-foreground: hsl(210 40% 98%);
+		--sidebar-border: hsl(217.2 32.6% 17.5%);
+		--sidebar-ring: hsl(224.3 76.3% 48%);
+	}
+
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
 	}
 }
 
@@ -123,10 +169,39 @@
 }
 
 /* Hide scrollbar for clean reading interfaces */
-.no-scrollbar::-webkit-scrollbar {
-	display: none;
+.no-scrollbar::-webkit-scrollbar,
+[data-slot="scroll-area-viewport"]::-webkit-scrollbar {
+	display: none !important;
+	width: 0 !important;
+	height: 0 !important;
 }
-.no-scrollbar {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+
+.no-scrollbar,
+[data-slot="scroll-area-viewport"] {
+	-ms-overflow-style: none !important;
+	scrollbar-width: none !important;
+}
+
+/* Sleek custom scrollbars for sidebar navigation */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: var(--border) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: var(--border);
+	border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: var(--muted-foreground);
 }

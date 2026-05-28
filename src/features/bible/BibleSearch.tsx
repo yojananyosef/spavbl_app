@@ -1,6 +1,8 @@
-import { BookOpen, ExternalLink, Search, X } from "lucide-react";
+import { BookOpen, ExternalLink, Search } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { SearchResult } from "../../core/entities";
 
 interface BibleSearchProps {
@@ -15,7 +17,7 @@ interface BibleSearchProps {
 /**
  * BibleSearch (Component)
  * Renders the modal search panel for full-text Bible search.
- * Includes interactive results and click-to-navigate bindings.
+ * Uses Shadcn Dialog and ScrollArea for premium UI/UX, accessibility, and smooth scrolling.
  */
 export const BibleSearch: React.FC<BibleSearchProps> = ({
 	searchQuery,
@@ -34,14 +36,14 @@ export const BibleSearch: React.FC<BibleSearchProps> = ({
 		}
 	}, [isOpen]);
 
-	if (!isOpen) return null;
-
 	return (
-		<div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-20 transition-all duration-300">
-			{/* Modal Container */}
-			<div className="w-full max-w-2xl bg-card text-foreground rounded-2xl shadow-2xl border border-border flex flex-col max-h-[70vh] overflow-hidden glass-panel">
+		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<DialogContent className="w-full max-w-2xl bg-card text-foreground rounded-2xl shadow-2xl border border-border flex flex-col h-[70vh] overflow-hidden bg-card/95 backdrop-blur-md p-0 gap-0">
+				{/* Screen reader title */}
+				<DialogTitle className="sr-only">Buscar en la Biblia</DialogTitle>
+
 				{/* Search input header */}
-				<div className="p-4 border-b border-border flex items-center gap-3">
+				<div className="p-4 border-b border-border flex items-center gap-3 shrink-0">
 					<Search className="text-muted-foreground" size={20} />
 					<input
 						ref={inputRef}
@@ -49,20 +51,14 @@ export const BibleSearch: React.FC<BibleSearchProps> = ({
 						placeholder="Buscar palabras o frases (ej. gracia, amor)..."
 						value={searchQuery}
 						onChange={(e) => onSearch(e.target.value)}
-						className="flex-1 bg-transparent border-0 outline-none text-base font-medium placeholder:text-muted-foreground/60"
+						className="flex-1 bg-transparent border-0 outline-none text-base font-medium placeholder:text-muted-foreground/60 focus:ring-0"
 					/>
-					<button
-						onClick={onClose}
-						className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
-					>
-						<X size={18} />
-					</button>
 				</div>
 
-				{/* Results Body */}
-				<div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+				{/* Results Body with custom ScrollArea */}
+				<ScrollArea className="flex-1 p-4">
 					{searchQuery.trim().length < 2 ? (
-						<div className="h-40 flex flex-col items-center justify-center gap-1.5 text-center text-muted-foreground/80">
+						<div className="h-[40vh] flex flex-col items-center justify-center gap-1.5 text-center text-muted-foreground/80">
 							<Search size={32} className="opacity-40 mb-1" />
 							<p className="text-sm font-semibold">
 								Búsqueda rápida en toda la Biblia
@@ -73,8 +69,11 @@ export const BibleSearch: React.FC<BibleSearchProps> = ({
 							</p>
 						</div>
 					) : searchResults.length === 0 ? (
-						<div className="h-40 flex flex-col items-center justify-center gap-1.5 text-center text-muted-foreground/80">
-							<X size={32} className="opacity-40 mb-1 text-destructive" />
+						<div className="h-[40vh] flex flex-col items-center justify-center gap-1.5 text-center text-muted-foreground/80">
+							<BookOpen
+								size={32}
+								className="opacity-40 mb-1 text-destructive"
+							/>
 							<p className="text-sm font-semibold">
 								Sin resultados encontrados
 							</p>
@@ -84,7 +83,7 @@ export const BibleSearch: React.FC<BibleSearchProps> = ({
 							</p>
 						</div>
 					) : (
-						<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-2 pb-6">
 							<div className="text-xxs font-bold uppercase tracking-wider text-muted-foreground/60 mb-2 px-1">
 								Concordancias encontradas ({searchResults.length})
 							</div>
@@ -119,9 +118,9 @@ export const BibleSearch: React.FC<BibleSearchProps> = ({
 							))}
 						</div>
 					)}
-				</div>
-			</div>
-		</div>
+				</ScrollArea>
+			</DialogContent>
+		</Dialog>
 	);
 };
 export default BibleSearch;

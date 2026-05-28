@@ -35,7 +35,7 @@ export function useBible() {
 	const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
 
 	// UI State
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 	const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
