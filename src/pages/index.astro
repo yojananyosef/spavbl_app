@@ -1,0 +1,10 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: used in Astro template below
+import { App } from "../App";
+// biome-ignore lint/correctness/noUnusedImports: used in Astro template below
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="VBL Digital - Versión Biblia Libre">
+  <App client:only="react" />
+</Layout>

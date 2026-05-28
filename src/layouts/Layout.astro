@@ -1,0 +1,24 @@
+---
+import "../index.css";
+
+interface Props {
+	title: string;
+}
+
+// biome-ignore lint/correctness/noUnusedVariables: used in Astro template below
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body class="h-full min-h-screen bg-background text-foreground antialiased font-sans">
+    <slot />
+  </body>
+</html>
