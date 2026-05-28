@@ -73,7 +73,7 @@ export const App: React.FC = () => {
 							<BookOpen size={16} />
 						</div>
 						<span className="font-bold text-base tracking-tight font-sans hidden sm:inline">
-							VBL Digital
+							Spavbl App
 						</span>
 					</div>
 				</div>

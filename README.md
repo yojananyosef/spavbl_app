@@ -1,6 +1,6 @@
-# VBL Digital (Versión Biblia Libre en Español - Astro Evolution)
+# Spavbl App (Versión Biblia Libre en Español - Astro Evolution)
 
-**VBL Digital** es una plataforma de lectura bíblica y estudio interactivo de vanguardia para la **Versión Biblia Libre (VBL)** en español, traducida por Jonathan Gallagher y Shelly Barrios de Avila y distribuida bajo la licencia *Creative Commons Attribution-Share-Alike 4.0*.
+**Spavbl App** es una plataforma de lectura bíblica y estudio interactivo de vanguardia para la **Versión Biblia Libre (VBL)** en español, traducida por Jonathan Gallagher y Shelly Barrios de Avila y distribuida bajo la licencia *Creative Commons Attribution-Share-Alike 4.0*.
 
 Este proyecto ha sido completamente rediseñado y modernizado, pasando de un sitio web estático tradicional a una **aplicación web y full-stack moderna basada en Astro (React Islands) y Cloudflare Pages**. Su desarrollo sigue los más altos estándares de calidad de la industria de software, implementando **Clean Code**, **Screaming Architecture** y **principios SOLID**.
 
@@ -60,7 +60,7 @@ Para evitar el ineficiente consumo de 6.1 MB de datos móviles en cada inicio de
 ### 2. Migración a Biome (Herramientas en Rust)
 Reemplazamos por completo la pesada y lenta pila de ESLint y Prettier por **Biome**, un formateador y linter unificado escrito en Rust:
 *   **Velocidad Excepcional**: Realiza la comprobación, validación semántica e import sorting de todo el proyecto en tan solo **298 milisegundos** (una mejora de más del **50x**).
-*   **Configuración de CSS para Tailwind v4**: Soporta nativamente las directivas avanzadas de Tailwind CSS v4 (`@theme`, `@layer`) a través de la regla `"tailwindDirectives": true` en [biome.json](file:///c:/Users/j/dev/spavbl_html/biome.json).
+*   **Configuración de CSS para Tailwind v4**: Soporta nativamente las directivas avanzadas de Tailwind CSS v4 (`@theme`, `@layer`) a través de la regla `"tailwindDirectives": true` en [biome.json].
 
 ### 3. Sincronización en la Nube con Cloudflare KV
 El proyecto está completamente preparado para conectarse a **Cloudflare KV o D1 (Base de Datos Relacional)** a través de funciones del servidor en Astro para que las notas de estudio y marcadores de los usuarios se sincronicen al instante en la red Edge global de Cloudflare.
@@ -74,7 +74,6 @@ El proyecto está completamente preparado para conectarse a **Cloudflare KV o D1
 *   📝 **Notas de Estudio Enriquecidas**: Editor flotante contextual (glassmorphism con desenfoque de fondo en tiempo real) para escribir reflexiones directamente asociadas a los versículos.
 *   🔍 **Búsqueda de Concordancias**: Motor de búsqueda instantáneo en el cliente que indexa y muestra versículos coincidentes letra a letra a medida que el usuario escribe.
 *   ♿ **Accesibilidad Total (WAI-ARIA)**: Marcado semántico completo (`role="button"`, `tabIndex={0}`) con soporte nativo de teclado (selección de versículos mediante las teclas `Enter` o `Espacio`) para personas con discapacidad visual o motora.
-*   📂 **Herencia de Archivos**: Los archivos HTML estáticos de la versión estática antigua se conservan de manera segura en el directorio [legacy_html/](file:///c:/Users/j/dev/spavbl_html/legacy_html).
 
 ---
 
