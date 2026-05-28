@@ -34,16 +34,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 	return (
 		<aside className="w-80 h-[calc(100vh-4rem)] bg-card/85 backdrop-blur-md border-r border-border overflow-hidden flex flex-col transition-all duration-300 z-10 shrink-0">
 			{/* Title Header */}
-			<div className="p-4 border-b border-border flex items-center gap-3">
-				<div className="p-2 rounded-lg bg-primary/10 text-primary">
-					<BookOpen size={20} />
+			<div className="h-16 px-4 border-b border-border flex items-center gap-2.5 shrink-0">
+				<div className="p-1.5 rounded-lg bg-primary/10 text-primary shrink-0">
+					<BookOpen size={16} />
 				</div>
-				<div>
-					<h2 className="font-semibold text-lg leading-tight tracking-tight">
+				<div className="min-w-0">
+					<h2 className="font-bold text-sm tracking-tight text-foreground truncate">
 						Versión Biblia Libre
 					</h2>
-					<p className="text-xs text-muted-foreground font-medium">
-						Jonathan Gallagher y Shelly Barrios
+					<p className="text-[10px] text-muted-foreground font-medium truncate">
+						J. Gallagher y S. Barrios
 					</p>
 				</div>
 			</div>
@@ -91,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 					{/* Scrollable Grid */}
 					<div className="flex-1 overflow-y-auto custom-scrollbar p-1.5">
 						{activeBook ? (
-							<div className="grid grid-cols-3 gap-1.5">
+							<div className="grid grid-cols-4 gap-1.5">
 								{Array.from(
 									{ length: activeBook.chaptersCount },
 									(_, i) => i + 1,
@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 										<button
 											key={chapterNum}
 											onClick={() => changeChapter(chapterNum)}
-											className={`aspect-square rounded-lg flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
+											className={`aspect-square rounded-lg flex items-center justify-center text-xs font-semibold transition-all duration-200 ${
 												isActive
 													? "bg-primary text-primary-foreground shadow-sm shadow-primary/20 scale-[0.96]"
 													: "bg-card text-foreground hover:bg-secondary hover:text-foreground border border-border/50 hover:border-border"

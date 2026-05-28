@@ -17,11 +17,18 @@ interface BookData {
  * Minimizes network requests and memory overhead by persisting book chunks locally.
  */
 class IndexedDBCache {
-	private dbName = "spavbl_bible_cache";
+	private dbName = "spavbl_bible_cache_v2";
 	private storeName = "books";
 	private db: IDBDatabase | null = null;
 
 	async init(): Promise<void> {
+		// Clean up old cached database to release storage
+		try {
+			indexedDB.deleteDatabase("spavbl_bible_cache");
+		} catch {
+			// Silently fail if cleanup fails
+		}
+
 		return new Promise((resolve, reject) => {
 			const request = indexedDB.open(this.dbName, 1);
 			request.onupgradeneeded = () => {

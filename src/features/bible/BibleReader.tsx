@@ -143,7 +143,7 @@ export const BibleReader: React.FC<BibleReaderProps> = ({
 	return (
 		<div className="flex-1 h-[calc(100vh-4rem)] flex flex-col relative overflow-hidden bg-background animate-accordion-down">
 			{/* 1. Chapter Title Header */}
-			<div className="px-6 py-4 border-b border-border flex items-center justify-between shrink-0 bg-card/85 backdrop-blur-md">
+			<div className="h-16 px-6 border-b border-border flex items-center justify-between shrink-0 bg-card/85 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<button
 						onClick={prevChapter}
